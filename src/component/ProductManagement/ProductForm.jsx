@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-const ProductForm = () => {
+const ProductForm = ({ handleAddProduct }) => {
+  const [error, serError] = useState("");
+
   const handleProductSubmit = (e) => {
     e.preventDefault();
     console.log(e.target);
@@ -9,14 +11,29 @@ const ProductForm = () => {
     const price = e.target.price.value;
     const quantity = e.target.quantity.value;
 
-    console.log(name, price, quantity);
+    // console.log(name, price, quantity);
+    // validation
+    if (name.length === 0) {
+      serError("please provide a product name");
+      return;
+    } else if (price.length === 0) {
+      serError("Please provide a price");
+      return;
+    } else if (price < 0) {
+      serError("price can not be negative");
+      return;
+    } else {
+      serError("");
+    }
 
-    const product = {
+    const newProduct = {
       name,
       price,
-      quantity
+      quantity,
     };
-    console.log(product);
+    // console.log(product);
+
+    handleAddProduct(newProduct);
   };
 
   return (
@@ -31,6 +48,9 @@ const ProductForm = () => {
         <br />
         <input type="submit" value="submit" />
       </form>
+      <p style={{ color: "red" }}>
+        <small>{error}</small>
+      </p>
     </div>
   );
 };
